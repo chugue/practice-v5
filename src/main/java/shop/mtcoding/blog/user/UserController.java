@@ -29,24 +29,15 @@ public class UserController {
 
     @PostMapping("/join")
     public String join(UserRequest.JoinDTO reqDTO) {
-        try {
-            userService.회원가입(reqDTO);
-        } catch (DataIntegrityViolationException e) {
-            throw new Exception400("동일한 유저네임이 존재합니다");
-        }
-
+        userService.회원가입(reqDTO);
         return "redirect:/";
     }
 
     @PostMapping("/login")
     public String login(UserRequest.LoginDTO reqDTO) {
-        try {
-            User sessionUser = userRepository.findByUsernameAndPassword(reqDTO.getUsername(), reqDTO.getPassword());
-            session.setAttribute("sessionUser", sessionUser);
-            return "redirect:/";
-        }catch (EmptyResultDataAccessException e){
-            throw new Exception401("유저네임 혹은 비밀번호가 틀렸어요");
-        }
+        User sessionUser = userService.로그인(reqDTO);
+        session.setAttribute("sessionUser", sessionUser);
+        return "redirect:/";
     }
 
     @GetMapping("/join-form")
@@ -63,7 +54,7 @@ public class UserController {
     public String updateForm(HttpServletRequest request) {
         User sessionUser = (User) session.getAttribute("sessionUser");
 
-        User user = userRepository.findById(sessionUser.getId());
+        User user = userService.회원수정폼(sessionUser.getId());
         request.setAttribute("user", user);
         return "user/update-form";
     }
