@@ -21,6 +21,19 @@ public class BoardServiceTest {
     private BoardJPARepository boardJPARepository;
 
     @Test
+    public void 게시글수정폼_test(){
+        // given
+        int boardId = 1;
+        User sessionUser = new User();
+        sessionUser.setId(1);
+        // when
+        Board board = boardService.게시글수정폼(boardId, sessionUser.getId());
+
+        // then
+
+    }
+
+    @Test
     public void 글쓰기_test(){
         // given
         User sessionUser = new User();
