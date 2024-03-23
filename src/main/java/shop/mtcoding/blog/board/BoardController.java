@@ -17,14 +17,14 @@ import java.util.List;
 @RequiredArgsConstructor // final이 붙은 친구들의 생성자를 만들어줘
 @Controller // new BoardController(IoC에서 BoardRepository를 찾아서 주입) -> IoC 컨테이너 등록
 public class BoardController {
-
+    private final BoardService boardService;
     private final BoardRepository boardRepository;
     private final HttpSession session;
 
     @PostMapping("/board/save")
     public String save(BoardRequest.SaveDTO reqDTO) {
         User sessionUser = (User) session.getAttribute("sessionUser");
-        boardRepository.save(reqDTO.toEntity(sessionUser));
+        boardService.글쓰기(sessionUser, reqDTO);
         return "redirect:/";
     }
 

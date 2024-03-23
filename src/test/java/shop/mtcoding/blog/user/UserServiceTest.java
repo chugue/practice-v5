@@ -1,4 +1,4 @@
-package shop.mtcoding.blog.board;
+package shop.mtcoding.blog.user;
 
 
 import org.junit.jupiter.api.Test;
