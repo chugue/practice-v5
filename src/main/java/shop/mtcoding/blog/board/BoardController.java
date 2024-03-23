@@ -21,6 +21,9 @@ public class BoardController {
     private final BoardRepository boardRepository;
     private final HttpSession session;
 
+
+
+
     @PostMapping("/board/save")
     public String save(BoardRequest.SaveDTO reqDTO) {
         User sessionUser = (User) session.getAttribute("sessionUser");
@@ -28,37 +31,25 @@ public class BoardController {
         return "redirect:/";
     }
 
-    @PostMapping("/board/{id}/update")
-    public String update(@PathVariable Integer id, BoardRequest.UpdateDTO reqDTO) {
+    @PostMapping("/board/{boardId}/update")
+    public String update(@PathVariable Integer boardId, BoardRequest.UpdateDTO reqDTO) {
         User sessionUser = (User) session.getAttribute("sessionUser");
-        Board board = boardRepository.findById(id);
-
-        if(sessionUser.getId() != board.getUser().getId()){
-            throw new Exception403("게시글을 수정할 권한이 없습니다");
-        }
-
-        boardRepository.updateById(id, reqDTO.getTitle(), reqDTO.getContent());
-        return "redirect:/board/" + id;
+        boardService.글수정(sessionUser.getId(), boardId, reqDTO );
+        return "redirect:/board/" + boardId;
     }
 
-    @GetMapping("/board/{id}/update-form")
+    @GetMapping("/board/{boardId}/update-form")
     public String updateForm(@PathVariable Integer boardId, HttpServletRequest request) {
-        User sessionUser = (User)session.getAttribute("sessionuser");
+        User sessionUser = (User)session.getAttribute("sessionUser");
         Board board = boardService.게시글수정폼(boardId, sessionUser.getId());
         request.setAttribute("board", board);
         return "board/update-form";
     }
 
-    @PostMapping("/board/{id}/delete")
-    public String delete(@PathVariable Integer id) {
+    @PostMapping("/board/{boardId}/delete")
+    public String delete(@PathVariable Integer boardId) {
         User sessionUser = (User) session.getAttribute("sessionUser");
-        Board board = boardRepository.findById(id);
-
-        if(sessionUser.getId() != board.getUser().getId()){
-            throw new Exception403("게시글을 삭제할 권한이 없습니다");
-        }
-
-        boardRepository.deleteById(id);
+        boardService.글삭제(sessionUser.getId(), boardId);
         return "redirect:/";
     }
 

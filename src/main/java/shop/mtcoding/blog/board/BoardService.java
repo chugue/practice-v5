@@ -19,6 +19,29 @@ public class BoardService {
     private final UserJPARepository userJPARepository;
 
 
+    @Transactional
+    public void 글삭제 (int sessionUserId, int boardId){
+        Board board = boardJPARepository.findById(boardId)
+                        .orElseThrow(() -> new Exception404("해당 게시글을 찾을 수 없습니다."));
+        if (sessionUserId != board.getUser().getId()){
+            throw new Exception403("게시글 삭제 권한이 없습니다.");
+        }
+        boardJPARepository.deleteById(boardId);
+    }
+
+    @Transactional
+    public void 글수정(int sessionUserId, int boardId, BoardRequest.UpdateDTO reqDTO) {
+        Board board = boardJPARepository.findById(boardId)
+                .orElseThrow(() -> new Exception404("게시글을 찾을 수 없습니다."));
+
+        if (sessionUserId != board.getUser().getId()){
+            throw new Exception403("게시글을 수정할 권한이 없습니다.");
+        }
+        board.setTitle(reqDTO.getTitle());
+        board.setContent(reqDTO.getContent());
+    }
+
+
     public Board 게시글수정폼 (int boardId, int sessionUserId){
         Board board = boardJPARepository.findById(boardId)
                 .orElseThrow(() -> new Exception404("게시글을 찾을 수 없습니다."));
