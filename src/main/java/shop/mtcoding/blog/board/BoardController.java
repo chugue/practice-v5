@@ -21,9 +21,6 @@ public class BoardController {
     private final BoardRepository boardRepository;
     private final HttpSession session;
 
-
-
-
     @PostMapping("/board/save")
     public String save(BoardRequest.SaveDTO reqDTO) {
         User sessionUser = (User) session.getAttribute("sessionUser");
@@ -55,7 +52,7 @@ public class BoardController {
 
     @GetMapping("/")
     public String index(HttpServletRequest request) {
-        List<Board> boardList = boardRepository.findAll();
+        List<Board> boardList = boardService.글목록조회();
         request.setAttribute("boardList", boardList);
         return "index";
     }

@@ -2,21 +2,25 @@ package shop.mtcoding.blog.board;
 
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import shop.mtcoding.blog._core.errors.exception.Exception401;
 import shop.mtcoding.blog._core.errors.exception.Exception403;
 import shop.mtcoding.blog._core.errors.exception.Exception404;
 import shop.mtcoding.blog.user.User;
-import shop.mtcoding.blog.user.UserJPARepository;
 
-import java.util.Optional;
+import java.util.List;
+
 
 @RequiredArgsConstructor
 @Service
 public class BoardService {
     private final BoardJPARepository boardJPARepository;
-    private final UserJPARepository userJPARepository;
+
+    public List<Board> 글목록조회 () {
+        Sort sort = Sort.by(Sort.Direction.DESC, "id");
+        return boardJPARepository.findAll(sort);
+    }
 
 
     @Transactional
