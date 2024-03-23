@@ -15,7 +15,7 @@ import shop.mtcoding.blog._core.errors.exception.Exception401;
 @RequiredArgsConstructor
 @Controller
 public class UserController {
-
+    private final UserService userService;
     private final UserRepository userRepository;
     private final HttpSession session;
 
@@ -30,7 +30,7 @@ public class UserController {
     @PostMapping("/join")
     public String join(UserRequest.JoinDTO reqDTO) {
         try {
-            userRepository.save(reqDTO.toEntity());
+            userService.회원가입(reqDTO);
         } catch (DataIntegrityViolationException e) {
             throw new Exception400("동일한 유저네임이 존재합니다");
         }
