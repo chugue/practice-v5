@@ -22,7 +22,8 @@ public class UserController {
     @PostMapping("/user/update")
     public String update(UserRequest.UpdateDTO reqDTO) {
         User sessionUser = (User) session.getAttribute("sessionUser");
-        User newSessionUser = userRepository.updateById(sessionUser.getId(), reqDTO.getPassword(), reqDTO.getEmail());
+        User newSessionUser = userService.회원정보수정(sessionUser.getId(), reqDTO);
+        // 회원정보가 업데이트 되었으면 다시 세션을 설정해줘야 된다.
         session.setAttribute("sessionUser", newSessionUser);
         return "redirect:/";
     }
