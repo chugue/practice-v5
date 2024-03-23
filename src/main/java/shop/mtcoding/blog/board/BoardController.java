@@ -62,20 +62,11 @@ public class BoardController {
         return "board/save-form";
     }
 
-    @GetMapping("/board/{id}")
-    public String detail(@PathVariable Integer id, HttpServletRequest request) {
+    @GetMapping("/board/{boardId}")
+    public String detail(@PathVariable Integer boardId, HttpServletRequest request) {
         User sessionUser = (User) session.getAttribute("sessionUser");
-        Board board = boardRepository.findByIdJoinUser(id);
+        Board board = boardService.글상세보기(sessionUser, boardId);
 
-        // 로그인을 하고, 게시글의 주인이면 isOwner가 true가 된다.
-        boolean isOwner = false;
-        if(sessionUser != null){
-            if(sessionUser.getId() == board.getUser().getId()){
-                isOwner = true;
-            }
-        }
-
-        request.setAttribute("isOwner", isOwner);
         request.setAttribute("board", board);
         return "board/detail";
     }

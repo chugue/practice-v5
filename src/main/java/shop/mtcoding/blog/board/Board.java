@@ -27,12 +27,16 @@ public class Board {
     @CreationTimestamp // pc -> db (날짜주입)
     private Timestamp createdAt;
 
+    @Transient
+    private boolean isOwner;
+
     @Builder
-    public Board(Integer id, String title, String content, User user, Timestamp createdAt) {
+    public Board(Integer id, String title, String content, User user, Timestamp createdAt, boolean isOwner) {
         this.id = id;
         this.title = title;
         this.content = content;
         this.user = user;
         this.createdAt = createdAt;
+        this.isOwner = isOwner;
     }
 }
